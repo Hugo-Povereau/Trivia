@@ -1,0 +1,3 @@
+définir méthodo/Stratégie -> prio 1 / difficulté : 1
+probablement ajouter/remplir fichier test -> prio 2 / difficulté : 2
+Faire liste améliorations -> prio 1 / difficulté : 1
