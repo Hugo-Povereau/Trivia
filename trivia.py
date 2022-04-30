@@ -19,10 +19,7 @@ class Game:
             self.pop_questions.append("Pop Question %s" % i)
             self.science_questions.append("Science Question %s" % i)
             self.sports_questions.append("Sports Question %s" % i)
-            self.rock_questions.append(self.create_rock_question(i))
-
-    def create_rock_question(self, index): #pourquoi différent?
-        return "Rock Question %s" % index
+            self.rock_questions.append("Rock Question %s" % i)
 
     def is_playable(self): #jamais appelé
         return self.how_many_players >= 2
@@ -81,16 +78,10 @@ class Game:
         if self._current_category == 'Rock': print(self.rock_questions.pop(0))
 
     @property
-    def _current_category(self): #calcul avec mod
-        if self.places[self.current_player] == 0: return 'Pop'
-        if self.places[self.current_player] == 4: return 'Pop'
-        if self.places[self.current_player] == 8: return 'Pop'
-        if self.places[self.current_player] == 1: return 'Science'
-        if self.places[self.current_player] == 5: return 'Science'
-        if self.places[self.current_player] == 9: return 'Science'
-        if self.places[self.current_player] == 2: return 'Sports'
-        if self.places[self.current_player] == 6: return 'Sports'
-        if self.places[self.current_player] == 10: return 'Sports'
+    def _current_category(self):
+        if self.places[self.current_player] % 4 == 0 : return 'Pop'
+        if self.places[self.current_player] % 4 == 1 : return 'Science'
+        if self.places[self.current_player] % 4 == 2 : return 'Sports'
         return 'Rock'
 
     def was_correctly_answered(self): # changer les 2 fonctions par is_correctly_answered
