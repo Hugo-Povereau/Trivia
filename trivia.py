@@ -34,7 +34,7 @@ class Game:
         self.in_penalty_box[self.how_many_players] = False # à voir si vrmt obligatoire
 
         print(player_name + " was added")
-        print("They are player number %s" % len(self.players)) #phrase inccorecte? they are->is?
+        print(player_name + "is player number %s" % len(self.players))
 
         return True
 
@@ -44,7 +44,7 @@ class Game:
 
     def roll(self, roll):
         print("%s is the current player" % self.players[self.current_player])
-        print("They have rolled a %s" % roll)
+        print("He/She have rolled a %s" % roll)
 
         if self.in_penalty_box[self.current_player]:
             if roll % 2 != 0: #impair pour sortir!
@@ -141,28 +141,3 @@ class Game:
 
     def _did_player_win(self):
         return not (self.purses[self.current_player] == 6) # premier à 6coins
-
-
-from random import randrange #monter
-
-if __name__ == '__main__':
-    not_a_winner = False
-
-    game = Game()
-
-    game.add('Chet')
-    game.add('Pat')
-    game.add('Sue')
-    game.add('zaezaea')
-    game.add('zaeaze')
-    #game.add('zaeza') # limité 5j échoue si plus
-
-    while True:
-        game.roll(randrange(5) + 1)
-
-        if randrange(9) == 7:
-            not_a_winner = game.wrong_answer()
-        else:
-            not_a_winner = game.was_correctly_answered()
-
-        if not not_a_winner: break
