@@ -1,0 +1,5 @@
+Retirer toutes les duplications
+Modifier les appels incohérents (ex : create_rock_question)
+réaranger certaines fonctions
+Rajouter des tests pour déterminer et personnaliser les potentielles erreurs (ex : 1<x<7 joueurs )
+Finir le refacto

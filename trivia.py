@@ -21,17 +21,17 @@ class Game:
             self.sports_questions.append("Sports Question %s" % i)
             self.rock_questions.append(self.create_rock_question(i))
 
-    def create_rock_question(self, index):  #pourquoi différent?
+    def create_rock_question(self, index): #pourquoi différent?
         return "Rock Question %s" % index
 
-    def is_playable(self): #marche pas??
+    def is_playable(self): #jamais appelé
         return self.how_many_players >= 2
 
     def add(self, player_name):
         self.players.append(player_name)
         self.places[self.how_many_players] = 0
         self.purses[self.how_many_players] = 0
-        self.in_penalty_box[self.how_many_players] = False # à voir si vrmt bligatoire
+        self.in_penalty_box[self.how_many_players] = False # à voir si vrmt obligatoire
 
         print(player_name + " was added")
         print("They are player number %s" % len(self.players)) #phrase inccorecte? they are->is?
@@ -64,9 +64,9 @@ class Game:
                 print("%s is not getting out of the penalty box" % self.players[self.current_player])
                 self.is_getting_out_of_penalty_box = False
         else:
-            self.places[self.current_player] = self.places[self.current_player] + roll
-            if self.places[self.current_player] > 11:
-                self.places[self.current_player] = self.places[self.current_player] - 12
+            self.places[self.current_player] = self.places[self.current_player] + roll ##duplication
+            if self.places[self.current_player] > 11: ##duplication
+                self.places[self.current_player] = self.places[self.current_player] - 12 ##duplication
 
             print(self.players[self.current_player] + \
                         '\'s new location is ' + \
@@ -93,7 +93,7 @@ class Game:
         if self.places[self.current_player] == 10: return 'Sports'
         return 'Rock'
 
-    def was_correctly_answered(self):
+    def was_correctly_answered(self): # changer les 2 fonctions par is_correctly_answered
         if self.in_penalty_box[self.current_player]:
             if self.is_getting_out_of_penalty_box: #nécessaire? éviter avec return dans autre fonction?
                 print('Answer was correct!!!!')
@@ -107,10 +107,10 @@ class Game:
                 self.current_player += 1
                 if self.current_player == len(self.players): self.current_player = 0
 
-                return winner #répétition
+                return winner
             else: #nécessaire?
-                self.current_player += 1 #répétition
-                if self.current_player == len(self.players): self.current_player = 0 #répétition
+                self.current_player += 1
+                if self.current_player == len(self.players): self.current_player = 0
                 return True #???
 
 
@@ -125,18 +125,18 @@ class Game:
                 ' Gold Coins.')
 
             winner = self._did_player_win()
-            self.current_player += 1 # répétition
-            if self.current_player == len(self.players): self.current_player = 0 #répétition
+            self.current_player += 1 #duplication
+            if self.current_player == len(self.players): self.current_player = 0 #duplication
 
-            return winner #répétition
+            return winner #duplication
 
     def wrong_answer(self):
         print('Question was incorrectly answered')
         print(self.players[self.current_player] + " was sent to the penalty box")
         self.in_penalty_box[self.current_player] = True
 
-        self.current_player += 1
-        if self.current_player == len(self.players): self.current_player = 0 #répétition (voir fun au dessus)
+        self.current_player += 1 #duplication
+        if self.current_player == len(self.players): self.current_player = 0 #duplication
         return True
 
     def _did_player_win(self):
