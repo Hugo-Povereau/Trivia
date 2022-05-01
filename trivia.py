@@ -91,7 +91,7 @@ class Game:
             winner = self.did_player_win()
             self.next_player()
 
-            return winner  # duplication
+            return winner
 
     def wrong_answer(self):
         if self.in_penalty_box[self.current_player]:
