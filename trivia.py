@@ -16,7 +16,7 @@ class Game:
 
         self.current_player = 0
 
-        for i in range(50):  # dépasse 50?
+        for i in range(50):
             self.pop_questions.append("Pop Question %s" % i)
             self.science_questions.append("Science Question %s" % i)
             self.sports_questions.append("Sports Question %s" % i)
@@ -30,14 +30,11 @@ class Game:
             self.players.append(player_name)
             self.places[self.how_many_players] = 0
             self.purses[self.how_many_players] = 0
-            self.in_penalty_box[self.how_many_players] = False  # à voir si vrmt obligatoire
+            self.in_penalty_box[self.how_many_players] = False
+            print(player_name + " is added")
+            print(player_name + " is player number %s" % len(self.players))
         else:
             print("sorry " + player_name + " the Game is already Full")
-
-        print(player_name + " is added")
-        print(player_name + " is player number %s" % len(self.players))
-
-        return True
 
     def roll(self, roll):
         if not self.is_playable():  # ajouter callOnce
@@ -60,14 +57,22 @@ class Game:
     def how_many_players(self):
         return len(self.players)
 
-    def _ask_question(self):
-        if self._current_category == 'Pop': print(self.pop_questions.pop(0))
-        if self._current_category == 'Science': print(self.science_questions.pop(0))
-        if self._current_category == 'Sports': print(self.sports_questions.pop(0))
-        if self._current_category == 'Rock': print(self.rock_questions.pop(0))
+    def ask_question(self):
+        if self.current_category == 'Pop':
+            print(self.pop_questions[0])
+            self.pop_questions.append(self.pop_questions.pop(0))
+        if self.current_category == 'Science':
+            print(self.science_questions[0])
+            self.science_questions.append(self.science_questions.pop(0))
+        if self.current_category == 'Sports':
+            print(self.sports_questions[0])
+            self.sports_questions.append(self.sports_questions.pop(0))
+        if self.current_category == 'Rock':
+            print(self.rock_questions[0])
+            self.rock_questions.append(self.rock_questions.pop(0))
 
     @property
-    def _current_category(self):
+    def current_category(self):
         if self.places[self.current_player] % 4 == 0: return 'Pop'
         if self.places[self.current_player] % 4 == 1: return 'Science'
         if self.places[self.current_player] % 4 == 2: return 'Sports'
@@ -75,8 +80,7 @@ class Game:
 
     def was_correctly_answered(self):
         if self.in_penalty_box[self.current_player]:
-            self.next_player()
-            return True
+            return self.next_player()
 
         else:
             print("Answer is correct!!!!")
@@ -84,35 +88,33 @@ class Game:
             print(self.players[self.current_player] + " now has " + str(
                 self.purses[self.current_player]) + " Gold Coins.")
 
-            winner = self._did_player_win()
+            winner = self.did_player_win()
             self.next_player()
 
             return winner  # duplication
 
     def wrong_answer(self):
         if self.in_penalty_box[self.current_player]:
-            self.next_player()
-            return True
+            return self.next_player()
         else:
             print('Question was incorrectly answered')
             print(self.players[self.current_player] + " was sent to the penalty box")
             self.in_penalty_box[self.current_player] = True
-            self.next_player()
-
-        return True
+            return self.next_player()
 
     def player_move(self, roll):
-        self.places[self.current_player] = self.places[self.current_player] + roll  ##duplication
-        if self.places[self.current_player] > 11:  ##duplication
-            self.places[self.current_player] = self.places[self.current_player] - 12  ##duplication
+        self.places[self.current_player] = self.places[self.current_player] + roll
+        if self.places[self.current_player] > 11:
+            self.places[self.current_player] = self.places[self.current_player] - 12
 
         print(self.players[self.current_player] + " new location is " + str(self.places[self.current_player]))
-        print("The category is %s" % self._current_category)
-        self._ask_question()
+        print("The category is %s" % self.current_category)
+        self.ask_question()
 
     def next_player(self):
         self.current_player += 1
         if self.current_player == len(self.players): self.current_player = 0
+        return False
 
-    def _did_player_win(self):
-        return not (self.purses[self.current_player] == self.coins_to_win)
+    def did_player_win(self):
+        return self.purses[self.current_player] == self.coins_to_win
