@@ -1,4 +1,4 @@
-from random import randrange #monter
+from random import randrange
 from trivia import Game
 
 if __name__ == '__main__':
@@ -11,7 +11,7 @@ if __name__ == '__main__':
     game.add('Sue')
     game.add('zaezaea')
     game.add('zaeaze')
-    #game.add('zaeza') # limité 5j échoue si plus
+    game.add('zaeza')
 
     while True:
         game.roll(randrange(5) + 1)
