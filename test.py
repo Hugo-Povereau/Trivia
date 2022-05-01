@@ -8,6 +8,11 @@ if __name__ == '__main__':
 
     game.add('Chet')
     game.add('Pat')
+    game.add('Gat')
+    game.add('Eat')
+    game.add('Aat')
+    game.add('Jat')
+    game.add('Kat')
 
     while True:
         game.roll(randrange(5) + 1)
@@ -17,4 +22,4 @@ if __name__ == '__main__':
         else:
             not_a_winner = game.was_correctly_answered()
 
-        if not not_a_winner: break
+        if not_a_winner: break
