@@ -15,7 +15,6 @@ class Game:
         self.rock_questions = []
 
         self.current_player = 0
-        self.is_getting_out_of_penalty_box = False
 
         for i in range(50):  # dépasse 50?
             self.pop_questions.append("Pop Question %s" % i)
@@ -35,8 +34,8 @@ class Game:
         else:
             print("sorry " + player_name + " the Game is already Full")
 
-        print(player_name + " was added")
-        print(player_name + "is player number %s" % len(self.players))
+        print(player_name + " is added")
+        print(player_name + " is player number %s" % len(self.players))
 
         return True
 
@@ -49,27 +48,13 @@ class Game:
 
         if self.in_penalty_box[self.current_player]:
             if roll % 2 != 0:
-                self.is_getting_out_of_penalty_box = True
-
+                self.in_penalty_box[self.current_player] = False
                 print("%s is getting out of the penalty box" % self.players[self.current_player])
-                self.places[self.current_player] = self.places[self.current_player] + roll
-                if self.places[self.current_player] > 11:  # plateau taille 12, variabiliser?
-                    self.places[self.current_player] = self.places[self.current_player] - 12  # si supérieur à 12???
-
-                print(self.players[self.current_player] + " new location is " + str(self.places[self.current_player]))
-                print("The category is %s" % self._current_category)
-                self._ask_question()
+                self.player_move(roll)
             else:
                 print("%s is not getting out of the penalty box" % self.players[self.current_player])
-                self.is_getting_out_of_penalty_box = False
         else:
-            self.places[self.current_player] = self.places[self.current_player] + roll  ##duplication
-            if self.places[self.current_player] > 11:  ##duplication
-                self.places[self.current_player] = self.places[self.current_player] - 12  ##duplication
-
-            print(self.players[self.current_player] + " new location is " + str(self.places[self.current_player]))
-            print("The category is %s" % self._current_category)
-            self._ask_question()
+            self.player_move(roll)
 
     @property
     def how_many_players(self):
@@ -88,43 +73,46 @@ class Game:
         if self.places[self.current_player] % 4 == 2: return 'Sports'
         return 'Rock'
 
-    def was_correctly_answered(self):  # changer les 2 fonctions par is_correctly_answered
+    def was_correctly_answered(self):
         if self.in_penalty_box[self.current_player]:
-            if self.is_getting_out_of_penalty_box:  # nécessaire? éviter avec return dans autre fonction?
-                print('Answer was correct!!!!')
-                self.purses[self.current_player] += 1
-                print(self.players[self.current_player] + " now has " + str(
-                    self.purses[self.current_player]) + "Gold Coins.")
-                winner = self._did_player_win()
-                self.current_player += 1
-                if self.current_player == len(self.players): self.current_player = 0
-
-                return winner
-            else:  # nécessaire?
-                self.current_player += 1
-                if self.current_player == len(self.players): self.current_player = 0
-                return True  # ???
+            self.next_player()
+            return True
 
         else:
-
             print("Answer is correct!!!!")
             self.purses[self.current_player] += 1
-            print(self.players[self.current_player] + " now has " + str(self.purses[self.current_player]) + " Gold Coins.")
+            print(self.players[self.current_player] + " now has " + str(
+                self.purses[self.current_player]) + " Gold Coins.")
 
             winner = self._did_player_win()
-            self.current_player += 1  # duplication
-            if self.current_player == len(self.players): self.current_player = 0  # duplication
+            self.next_player()
 
             return winner  # duplication
 
     def wrong_answer(self):
-        print('Question was incorrectly answered')
-        print(self.players[self.current_player] + " was sent to the penalty box")
-        self.in_penalty_box[self.current_player] = True
+        if self.in_penalty_box[self.current_player]:
+            self.next_player()
+            return True
+        else:
+            print('Question was incorrectly answered')
+            print(self.players[self.current_player] + " was sent to the penalty box")
+            self.in_penalty_box[self.current_player] = True
+            self.next_player()
 
-        self.current_player += 1  # duplication
-        if self.current_player == len(self.players): self.current_player = 0  # duplication
         return True
+
+    def player_move(self, roll):
+        self.places[self.current_player] = self.places[self.current_player] + roll  ##duplication
+        if self.places[self.current_player] > 11:  ##duplication
+            self.places[self.current_player] = self.places[self.current_player] - 12  ##duplication
+
+        print(self.players[self.current_player] + " new location is " + str(self.places[self.current_player]))
+        print("The category is %s" % self._current_category)
+        self._ask_question()
+
+    def next_player(self):
+        self.current_player += 1
+        if self.current_player == len(self.players): self.current_player = 0
 
     def _did_player_win(self):
         return not (self.purses[self.current_player] == self.coins_to_win)
