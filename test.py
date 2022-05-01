@@ -8,10 +8,6 @@ if __name__ == '__main__':
 
     game.add('Chet')
     game.add('Pat')
-    game.add('Sue')
-    game.add('zaezaea')
-    game.add('zaeaze')
-    game.add('zaeza')
 
     while True:
         game.roll(randrange(5) + 1)
